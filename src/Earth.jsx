@@ -1,13 +1,10 @@
 import { useTexture } from '@react-three/drei'
-import { useFrame, useThree } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
-import { Group } from 'three'
 import Moon from './Moon'
 
-const Earth = ({ displacementScale, position }) => {
+const Earth = ({ displacementScale }) => {
   const earthRef = useRef()
-  const groupRef = useRef(new Group())
-  const { camera } = useThree()
 
   const [earthTexture, earthNormalMap, earthSpecularMap, earthDisplacementMap] =
     useTexture([
@@ -17,16 +14,12 @@ const Earth = ({ displacementScale, position }) => {
       '/assets/earth_displacement.jpg',
     ])
 
-  useFrame(({ clock }) => {
-    const time = clock.getElapsedTime()
-    const earthSpeed = 0.002
-    const moonSpeed = 0.05 / 2
-    earthRef.current.rotation.y = time * earthSpeed
-    groupRef.current.rotation.y = time * moonSpeed
+  useFrame(() => {
+    earthRef.current.rotation.y += 0.002
   })
 
   return (
-    <group ref={groupRef} position={position}>
+    <group>
       <mesh ref={earthRef}>
         {/* Radius , X-axis , Y-axis */}
         <sphereGeometry args={[1, 32, 32]} />
@@ -38,7 +31,7 @@ const Earth = ({ displacementScale, position }) => {
           displacementScale={displacementScale}
         />
       </mesh>
-      <Moon distance={2} speed={0.05} radius={0.3} />
+      <Moon />
     </group>
   )
 }

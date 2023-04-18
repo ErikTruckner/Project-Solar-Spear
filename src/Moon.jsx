@@ -1,28 +1,23 @@
-import React, { useRef } from 'react'
+import { useTexture } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
+import { useRef } from 'react'
 
-const Moon = ({ distance, speed, radius }) => {
-  const meshRef = useRef()
-  const orbitAngle = useRef(0)
-  const rotationAngle = useRef(0)
+const Moon = () => {
+  const moonRef = useRef()
+
+  const [moonTexture] = useTexture(['/assets/moon_map.jpg'])
 
   useFrame(({ clock }) => {
-    const moonSpeed = 0.5
-    const orbitSpeed = moonSpeed / distance
-    orbitAngle.current = orbitSpeed * clock.elapsedTime
-    rotationAngle.current += moonSpeed * clock.elapsedTime
-
-    const x = Math.cos(orbitAngle.current) * distance
-    const z = Math.sin(orbitAngle.current) * distance
-    meshRef.current.position.set(x, 0, z)
-
-    meshRef.current.rotation.y = rotationAngle.current
+    moonRef.current.position.x = Math.sin(clock.getElapsedTime() * 0.2) * 4
+    moonRef.current.position.z = Math.cos(clock.getElapsedTime() * 0.2) * 4
+    moonRef.current.rotation.y += 0.005
   })
 
   return (
-    <mesh ref={meshRef}>
-      <sphereGeometry args={[radius, 64, 64]} />
-      <meshStandardMaterial color='#ffffff' />
+    <mesh ref={moonRef} position={[4, 0, 0]}>
+      {/* Radius , X-axis , Y-axis */}
+      <sphereGeometry args={[0.5, 32, 32]} />
+      <meshPhongMaterial map={moonTexture} />
     </mesh>
   )
 }
