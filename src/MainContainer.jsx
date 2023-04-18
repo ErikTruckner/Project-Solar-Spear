@@ -11,7 +11,6 @@ const MainContainer = () => {
   useHelper(directionalLightRefTwo, THREE.DirectionalLightHelper, 1, 'hotpink')
   return (
     <>
-      <color attach='background' args={['black']} />
       <AnimatedStars />
       {/* <directionalLight
         ref={directionalLightRef}
@@ -22,7 +21,7 @@ const MainContainer = () => {
       <directionalLight ref={directionalLightRefTwo} position={[0, 0, -10]} /> */}
       <ambientLight />
 
-      <Earth displacementScale={0.15} />
+      <Earth position={[0, 0, 0]} displacementScale={0.02} />
     </>
   )
 }
