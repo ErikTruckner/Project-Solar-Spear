@@ -4,30 +4,31 @@ import { useRef, useEffect } from 'react'
 import Earth from './Earth'
 import * as THREE from 'three'
 import { useThree } from '@react-three/fiber'
+import UseCameraPositionLogging from './hooks/UseCameraPositionLogging'
 
 const MainContainer = () => {
   // CAMERA LOCATION TRACKER
-  const { camera } = useThree()
-  const cameraRef = useRef(camera)
+  // const { camera } = useThree()
+  // const cameraRef = useRef(camera)
 
-  useEffect(() => {
-    const logCameraPosition = () => {
-      const { x, y, z } = cameraRef.current.position
-      const roundedX = Math.round(x * 100) / 100
-      const roundedY = Math.round(y * 100) / 100
-      const roundedZ = Math.round(z * 100) / 100
-      console.log(
-        `Camera position: x: ${roundedX}, y: ${roundedY}, z: ${roundedZ}`
-      )
-    }
+  // useEffect(() => {
+  //   const logCameraPosition = () => {
+  //     const { x, y, z } = cameraRef.current.position
+  //     const roundedX = Math.round(x * 100) / 100
+  //     const roundedY = Math.round(y * 100) / 100
+  //     const roundedZ = Math.round(z * 100) / 100
+  //     console.log(
+  //       `Camera position: x: ${roundedX}, y: ${roundedY}, z: ${roundedZ}`
+  //     )
+  //   }
 
-    cameraRef.current = camera
-    window.addEventListener('mousedown', logCameraPosition)
+  //   cameraRef.current = camera
+  //   window.addEventListener('mousedown', logCameraPosition)
 
-    return () => {
-      window.removeEventListener('mousedown', logCameraPosition)
-    }
-  }, [])
+  //   return () => {
+  //     window.removeEventListener('mousedown', logCameraPosition)
+  //   }
+  // }, [])
 
   //
 
@@ -38,6 +39,7 @@ const MainContainer = () => {
 
   return (
     <>
+      <UseCameraPositionLogging event='mousedown' />
       <AnimatedStars />
       <directionalLight
         ref={directionalLightRef}
