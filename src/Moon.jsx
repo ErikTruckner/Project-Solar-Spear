@@ -14,7 +14,7 @@ const Moon = () => {
   })
 
   return (
-    <mesh ref={moonRef} position={[4, 0, 0]}>
+    <mesh ref={moonRef} position={[4, 0, 0]} receiveShadow castShadow>
       {/* Radius , X-axis , Y-axis */}
       <sphereGeometry args={[0.5, 32, 32]} />
       <meshPhongMaterial map={moonTexture} />
