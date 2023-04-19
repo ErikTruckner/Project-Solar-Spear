@@ -42,12 +42,19 @@ const MainContainer = () => {
       <UseCameraPositionLogging event='mousedown' />
       <AnimatedStars />
       <directionalLight
+        castShadow
+        shadow-mapSize-height={512}
+        shadow-mapSize-width={512}
         ref={directionalLightRef}
         position={[0, 0, 10]}
         intensity={1}
         // color={0xff0000}
       />
-      <directionalLight ref={directionalLightRefTwo} position={[0, 0, -10]} />
+      <directionalLight
+        castShadow
+        ref={directionalLightRefTwo}
+        position={[0, 0, -10]}
+      />
       {/* <ambientLight /> */}
 
       <Earth position={[0, 0, 0]} displacementScale={0.05} />
