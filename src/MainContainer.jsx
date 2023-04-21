@@ -1,10 +1,12 @@
 import { useHelper } from '@react-three/drei'
 import AnimatedStars from './AnimatedStars'
 import { useRef, useEffect } from 'react'
-import Earth from './Earth'
+
 import * as THREE from 'three'
-import { useThree } from '@react-three/fiber'
+
 import UseCameraPositionLogging from './hooks/UseCameraPositionLogging'
+
+import Earth from './planets/earth/Earth'
 
 const MainContainer = () => {
   // CAMERA LOCATION TRACKER
@@ -55,7 +57,7 @@ const MainContainer = () => {
         ref={directionalLightRefTwo}
         position={[0, 0, -10]}
       />
-      {/* <ambientLight /> */}
+      <ambientLight />
 
       <Earth position={[0, 0, 0]} displacementScale={0.05} />
     </>
