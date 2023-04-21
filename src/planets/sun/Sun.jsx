@@ -1,4 +1,4 @@
-import { useTexture } from '@react-three/drei'
+import { useTexture, useHelper } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 
@@ -13,7 +13,13 @@ const Sun = () => {
     <mesh ref={sunRef}>
       {/* Radius , X-axis , Y-axis */}
       <sphereGeometry args={[1.5, 32, 32]} />
-      <meshPhongMaterial map={sunTexture} />
+      <meshPhongMaterial
+        map={sunTexture}
+        emissiveMap={sunTexture}
+        emissiveIntensity={0.6}
+        emissive={0xffffff}
+      />
+      <pointLight castShadow />
     </mesh>
   )
 }

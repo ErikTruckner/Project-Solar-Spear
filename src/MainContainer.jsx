@@ -54,7 +54,7 @@ const MainContainer = () => {
       </GizmoHelper>
       <UseCameraPositionLogging event='mousedown' />
       <AnimatedStars />
-      <directionalLight
+      {/* <directionalLight
         castShadow
         shadow-mapSize-height={512}
         shadow-mapSize-width={512}
@@ -67,8 +67,8 @@ const MainContainer = () => {
         castShadow
         ref={directionalLightRefTwo}
         position={[0, 0, -10]}
-      />
-      <ambientLight intensity={0.7} />
+      /> */}
+      <ambientLight intensity={0.1} />
       <Sun />
 
       <Earth position={[7, 0, 0]} displacementScale={0.05} />
