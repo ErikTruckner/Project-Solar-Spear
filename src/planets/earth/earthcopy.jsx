@@ -1,13 +1,5 @@
-import { useTexture } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
-import { useRef } from 'react'
-import * as THREE from 'three'
-import Moon from './Moon'
-import ISS from './ISS'
-
 const Earth = ({ displacementScale, position }) => {
   const earthRef = useRef()
-  const earthPositionRef = useRef(position)
 
   const [earthTexture, earthNormalMap, earthSpecularMap, earthDisplacementMap] =
     useTexture([
@@ -19,24 +11,25 @@ const Earth = ({ displacementScale, position }) => {
 
   useFrame(() => {
     earthRef.current.rotation.y += 0.002
-    earthPositionRef.current = earthRef.current.position
   })
 
   return (
-    <group position={position} ref={earthRef}>
-      <mesh receiveShadow>
+    <group>
+      <mesh receiveShadow position={position} ref={earthRef}>
+        {/* Radius , X-axis , Y-axis */}
         <sphereGeometry args={[1, 64, 64]} />
         <meshPhongMaterial
           map={earthTexture}
           normalMap={earthNormalMap}
+          // normalScale={[0.2, 0.2]}
           specularMap={earthSpecularMap}
           shininess={100}
           displacementMap={earthDisplacementMap}
           displacementScale={displacementScale}
         />
       </mesh>
-      <Moon />
       <ISS />
+      <Moon />
     </group>
   )
 }

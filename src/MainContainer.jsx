@@ -43,6 +43,7 @@ const MainContainer = () => {
     <>
       <GizmoHelper
         alignment='bottom-right' // widget alignment within scene
+        margin={[80, 80]} // widget margins (X, Y)
       >
         <GizmoViewport
           axisColors={['red', 'green', 'blue']}
@@ -68,7 +69,7 @@ const MainContainer = () => {
       />
       <ambientLight intensity={0.7} />
 
-      <Earth position={[3, 0, 0]} displacementScale={0.05} />
+      <Earth position={[7, 0, 0]} displacementScale={0.05} />
     </>
   )
 }
