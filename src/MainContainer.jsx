@@ -1,4 +1,4 @@
-import { useHelper } from '@react-three/drei'
+import { useHelper, GizmoHelper, GizmoViewport } from '@react-three/drei'
 import AnimatedStars from './AnimatedStars'
 import { useRef, useEffect } from 'react'
 
@@ -41,6 +41,15 @@ const MainContainer = () => {
 
   return (
     <>
+      <GizmoHelper
+        alignment='bottom-right' // widget alignment within scene
+      >
+        <GizmoViewport
+          axisColors={['red', 'green', 'blue']}
+          labelColor='black'
+        />
+        {/* alternative: <GizmoViewcube /> */}
+      </GizmoHelper>
       <UseCameraPositionLogging event='mousedown' />
       <AnimatedStars />
       <directionalLight
@@ -57,9 +66,9 @@ const MainContainer = () => {
         ref={directionalLightRefTwo}
         position={[0, 0, -10]}
       />
-      <ambientLight />
+      <ambientLight intensity={0.7} />
 
-      <Earth position={[0, 0, 0]} displacementScale={0.05} />
+      <Earth position={[3, 0, 0]} displacementScale={0.05} />
     </>
   )
 }

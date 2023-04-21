@@ -8,8 +8,10 @@ const Moon = () => {
   const [moonTexture] = useTexture(['/assets/moon_map.jpg'])
   const xAxis = 5
   useFrame(({ clock }) => {
+    // orbital rotation
     moonRef.current.position.x = Math.sin(clock.getElapsedTime() * 0.6) * xAxis
     moonRef.current.position.z = Math.cos(clock.getElapsedTime() * 0.6) * xAxis
+    // axis rotation
     moonRef.current.rotation.y += 0.005
   })
 

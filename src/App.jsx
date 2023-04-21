@@ -6,7 +6,7 @@ function App() {
   return (
     <Canvas
       shadows
-      camera={{ fov: 75, near: 0.1, far: 1000, position: [3.02, 3.32, 4.1] }}>
+      camera={{ fov: 35, near: 0.01, far: 1000, position: [7.02, 7.32, 9.1] }}>
       <color attach='background' args={['black']} />
       <MainContainer />
       <OrbitControls />
