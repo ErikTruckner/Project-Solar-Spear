@@ -7,6 +7,7 @@ import * as THREE from 'three'
 import UseCameraPositionLogging from './hooks/UseCameraPositionLogging'
 
 import Earth from './planets/earth/Earth'
+import Sun from './planets/sun/Sun'
 
 const MainContainer = () => {
   // CAMERA LOCATION TRACKER
@@ -68,6 +69,7 @@ const MainContainer = () => {
         position={[0, 0, -10]}
       />
       <ambientLight intensity={0.7} />
+      <Sun />
 
       <Earth position={[7, 0, 0]} displacementScale={0.05} />
     </>

@@ -5,9 +5,9 @@ import * as THREE from 'three'
 import Moon from './Moon'
 import ISS from './ISS'
 
-const Earth = ({ displacementScale, position }) => {
+const Earth = ({ displacementScale }) => {
   const earthRef = useRef()
-  const earthPositionRef = useRef(position)
+  const earthPositionRef = useRef(new THREE.Vector3(10, 0, 0))
 
   const [earthTexture, earthNormalMap, earthSpecularMap, earthDisplacementMap] =
     useTexture([
@@ -17,13 +17,19 @@ const Earth = ({ displacementScale, position }) => {
       '/assets/earth_displacement.jpg',
     ])
 
-  useFrame(() => {
+  useFrame(({ clock }) => {
+    // Calculate the Earth's position based on its angle from the Sun
+    const angle = clock.getElapsedTime() * 0.5
+    const distance = 10
+    const x = Math.sin(angle) * distance
+    const z = Math.cos(angle) * distance
+    earthRef.current.position.set(x, 0, z)
     earthRef.current.rotation.y += 0.002
     earthPositionRef.current = earthRef.current.position
   })
 
   return (
-    <group position={position} ref={earthRef}>
+    <group ref={earthRef}>
       <mesh receiveShadow>
         <sphereGeometry args={[1, 64, 64]} />
         <meshPhongMaterial
@@ -35,8 +41,8 @@ const Earth = ({ displacementScale, position }) => {
           displacementScale={displacementScale}
         />
       </mesh>
-      <Moon />
-      <ISS />
+      <Moon earthPosition={earthPositionRef.current} />
+      <ISS earthPosition={earthPositionRef.current} />
     </group>
   )
 }
