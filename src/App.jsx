@@ -10,7 +10,7 @@ function App() {
         fov: 35,
         near: 0.01,
         far: 1000,
-        position: [11.02, 7.32, 19.1],
+        position: [16.26, 20.32, 26.11],
       }}>
       <color attach='background' args={['black']} />
       <MainContainer />
