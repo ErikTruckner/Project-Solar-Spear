@@ -7,10 +7,10 @@ function App() {
     <Canvas
       shadows
       camera={{
-        fov: 35,
+        fov: 55,
         near: 0.01,
         far: 1000,
-        position: [16.26, 20.32, 26.11],
+        position: [16.14, 8.32, 19.81],
       }}>
       <color attach='background' args={['black']} />
       <MainContainer />

@@ -8,6 +8,7 @@ import UseCameraPositionLogging from './hooks/UseCameraPositionLogging'
 
 import Earth from './planets/earth/Earth'
 import Sun from './planets/sun/Sun'
+import { Perf } from 'r3f-perf'
 
 const MainContainer = () => {
   // CAMERA LOCATION TRACKER
@@ -35,13 +36,14 @@ const MainContainer = () => {
 
   //
 
-  const directionalLightRef = useRef()
-  const directionalLightRefTwo = useRef()
-  useHelper(directionalLightRef, THREE.DirectionalLightHelper, 1, 'hotpink')
-  useHelper(directionalLightRefTwo, THREE.DirectionalLightHelper, 1, 'hotpink')
+  // const directionalLightRef = useRef()
+  // const directionalLightRefTwo = useRef()
+  // useHelper(directionalLightRef, THREE.DirectionalLightHelper, 1, 'hotpink')
+  // useHelper(directionalLightRefTwo, THREE.DirectionalLightHelper, 1, 'hotpink')
 
   return (
     <>
+      <Perf />
       <GizmoHelper
         alignment='bottom-right' // widget alignment within scene
         margin={[80, 80]} // widget margins (X, Y)
