@@ -48,8 +48,6 @@ const Moon = React.memo(() => {
       <sphereGeometry args={[0.5, 32, 32]} />
       <meshPhongMaterial
         map={moonTexture}
-        normalMap={moonTexture}
-        emissiveMap={moonTexture}
         emissive={0xffffff}
         emissiveIntensity={0.02}
       />
