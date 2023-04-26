@@ -1,6 +1,6 @@
 import { useTexture } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import React, { useRef, useState, useCallback } from 'react'
+import React, { useRef, useState, useEffect, useCallback } from 'react'
 import * as THREE from 'three'
 import Moon from './Moon'
 import ISS from './ISS'
@@ -40,6 +40,10 @@ const Earth = React.memo(({ displacementScale }) => {
   useFrame(() => {
     updateEarthPosition()
   })
+
+  useEffect(() => {
+    document.body.style.cursor = hovered ? 'pointer' : 'auto'
+  }, [hovered])
 
   return (
     <group ref={earthRef}>
