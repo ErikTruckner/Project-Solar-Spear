@@ -50,6 +50,8 @@ const Earth = React.memo(({ displacementScale }) => {
   useEffect(() => {
     document.body.style.cursor = hovered ? 'pointer' : 'auto'
   }, [hovered])
+  //
+  //
 
   const handleClick = () => {
     const earthPosition = earthRef.current.position
@@ -75,8 +77,8 @@ const Earth = React.memo(({ displacementScale }) => {
       // If not following the Earth, move the camera to look at the Earth
       const targetPosition = new THREE.Vector3(
         earthPosition.x,
-        earthPosition.y + 2,
-        earthPosition.z + 5
+        earthPosition.y + 4,
+        earthPosition.z + 8
       )
 
       const earthPositionClone = earthPositionRef.current.clone()
@@ -98,9 +100,10 @@ const Earth = React.memo(({ displacementScale }) => {
       setFollowEarth(true)
     }
   }
-  //
+
   useFrame(() => {
     updateEarthPosition()
+    TWEEN.update() // Call TWEEN.update() on every frame to update the tweens
     if (followEarth) {
       const earthPosition = earthRef.current.position
       const cameraPosition = camera.position
