@@ -1,7 +1,9 @@
 import { useTexture } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
+
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import * as THREE from 'three'
+import * as TWEEN from '@tweenjs/tween.js'
 import Moon from './Moon'
 import ISS from './ISS'
 
@@ -12,6 +14,12 @@ const Earth = React.memo(({ displacementScale }) => {
 
   //
   const [hovered, hover] = useState(false)
+  const [clicked, click] = useState(false)
+  const [followEarth, setFollowEarth] = useState(false)
+  //
+  //
+  const { camera } = useThree()
+  //
 
   const [
     earthTexture,
@@ -37,16 +45,67 @@ const Earth = React.memo(({ displacementScale }) => {
     earthPositionRef.current = earthRef.current.position
   }, [])
 
-  useFrame(() => {
-    updateEarthPosition()
-  })
-
   useEffect(() => {
     document.body.style.cursor = hovered ? 'pointer' : 'auto'
   }, [hovered])
 
+  const handleClick = () => {
+    const earthPosition = earthRef.current.position
+    const cameraPosition = camera.position.clone()
+    const tweenDuration = 1000 // in milliseconds
+
+    if (followEarth) {
+      // If already following the Earth, move the camera back to its original position
+      new TWEEN.Tween(cameraPosition)
+        .to({ x: 16.14, y: 8.32, z: 19.81 }, tweenDuration)
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .onUpdate(() => {
+          camera.position.copy(cameraPosition)
+          camera.lookAt(new THREE.Vector3(0, 0, 0))
+          camera.updateProjectionMatrix()
+        })
+        .start()
+
+      setFollowEarth(false)
+    } else {
+      // If not following the Earth, move the camera to look at the Earth
+      const targetPosition = new THREE.Vector3(
+        earthPosition.x,
+        earthPosition.y + 2,
+        earthPosition.z + 5
+      )
+
+      new TWEEN.Tween(cameraPosition)
+        .to(targetPosition, tweenDuration)
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .onUpdate(() => {
+          camera.position.copy(cameraPosition)
+          camera.lookAt(earthPosition)
+        })
+        .start()
+
+      setFollowEarth(true)
+    }
+
+    click(!clicked)
+  }
+  //
+  useFrame((state, delta) => {
+    updateEarthPosition()
+    if (followEarth) {
+      const earthPosition = earthRef.current.position
+      const cameraPosition = camera.position
+      cameraPosition.set(
+        earthPosition.x + 10,
+        earthPosition.y + 2,
+        earthPosition.z + 5
+      )
+      camera.lookAt(earthPosition)
+    }
+  })
+
   return (
-    <group ref={earthRef}>
+    <group ref={earthRef} onClick={handleClick}>
       <mesh
         castShadow
         receiveShadow
@@ -54,9 +113,10 @@ const Earth = React.memo(({ displacementScale }) => {
         onPointerOver={(event) => hover(true)}
         onPointerOut={(event) => hover(false)}
         // Use pointerEvents to change cursor on hover
-        onContextMenu={(event) => event.preventDefault()}
+
         style={{ cursor: hovered ? 'pointer' : 'auto' }}>
         {/*  */}
+
         <sphereGeometry args={[1, 64, 64]} />
         <meshPhongMaterial
           map={earthTexture}
