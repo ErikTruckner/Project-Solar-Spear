@@ -49,10 +49,10 @@ const Earth = React.memo(({ displacementScale }) => {
     document.body.style.cursor = hovered ? 'pointer' : 'auto'
   }, [hovered])
 
-  const handleClick = () => {
+  const toggleCamera = () => {
     const earthPosition = earthRef.current.position
     const cameraPosition = camera.position.clone()
-    const tweenDuration = 1000 // in milliseconds
+    const tweenDuration = 500 // in milliseconds
 
     if (followEarth) {
       // If already following the Earth, move the camera back to its original position
@@ -77,7 +77,7 @@ const Earth = React.memo(({ displacementScale }) => {
 
       new TWEEN.Tween(cameraPosition)
         .to(targetPosition, tweenDuration)
-        .easing(TWEEN.Easing.Quadratic.Out)
+        .easing(TWEEN.Easing.Quadratic.InOut)
         .onUpdate(() => {
           camera.position.copy(cameraPosition)
           camera.lookAt(earthPosition)
@@ -105,7 +105,7 @@ const Earth = React.memo(({ displacementScale }) => {
   })
 
   return (
-    <group ref={earthRef} onClick={handleClick}>
+    <group ref={earthRef} onClick={toggleCamera}>
       <mesh
         castShadow
         receiveShadow
