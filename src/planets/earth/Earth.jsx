@@ -61,7 +61,7 @@ const Earth = React.memo(({ displacementScale }) => {
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(() => {
           camera.position.copy(cameraPosition)
-          camera.lookAt(new THREE.Vector3(0, 0, 0))
+
           camera.updateProjectionMatrix()
         })
         .start()
@@ -80,7 +80,7 @@ const Earth = React.memo(({ displacementScale }) => {
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(() => {
           camera.position.copy(cameraPosition)
-          camera.lookAt(earthPosition)
+          camera.updateProjectionMatrix()
         })
         .start()
 
@@ -90,7 +90,7 @@ const Earth = React.memo(({ displacementScale }) => {
   //
   useFrame(() => {
     updateEarthPosition()
-    TWEEN.update()
+
     if (followEarth) {
       const earthPosition = earthRef.current.position
       const cameraPosition = camera.position
@@ -101,7 +101,29 @@ const Earth = React.memo(({ displacementScale }) => {
       )
       camera.lookAt(earthPosition)
     }
+    TWEEN.update()
   })
+
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     const earthPos = earthRef.current.position
+  //     const cameraPos = camera.position
+  //     console.log(
+  //       'Earth position: ',
+  //       earthPos.x.toFixed(1),
+  //       earthPos.y.toFixed(1),
+  //       earthPos.z.toFixed(1)
+  //     )
+  //     console.log(
+  //       'Camera position: ',
+  //       cameraPos.x.toFixed(1),
+  //       cameraPos.y.toFixed(1),
+  //       cameraPos.z.toFixed(1)
+  //     )
+  //   }, 1000)
+
+  //   return () => clearInterval(interval)
+  // }, [])
 
   return (
     <group ref={earthRef} onClick={toggleCamera}>
@@ -109,8 +131,8 @@ const Earth = React.memo(({ displacementScale }) => {
         castShadow
         receiveShadow
         // NEW ADDITIONS
-        onPointerOver={(event) => hover(true)}
-        onPointerOut={(event) => hover(false)}
+        onPointerOver={() => hover(true)}
+        onPointerOut={() => hover(false)}
         // Use pointerEvents to change cursor on hover
 
         style={{ cursor: hovered ? 'pointer' : 'auto' }}>
