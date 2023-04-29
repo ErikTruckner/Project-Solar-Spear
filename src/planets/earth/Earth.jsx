@@ -61,7 +61,9 @@ const Earth = React.memo(({ displacementScale }) => {
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(() => {
           camera.position.copy(cameraPosition)
-
+          camera.lookAt(0, 0, 0) // Look at the origin
+        })
+        .onComplete(() => {
           camera.updateProjectionMatrix()
         })
         .start()
@@ -74,12 +76,18 @@ const Earth = React.memo(({ displacementScale }) => {
         earthPosition.y + 2,
         earthPosition.z + 5
       )
+      const targetQuaternion = new THREE.Quaternion().setFromEuler(
+        new THREE.Euler(-0.5, 0, 0, 'XYZ')
+      )
 
       new TWEEN.Tween(cameraPosition)
         .to(targetPosition, tweenDuration)
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(() => {
           camera.position.copy(cameraPosition)
+          camera.lookAt(earthPosition) // Look at the Earth
+        })
+        .onComplete(() => {
           camera.updateProjectionMatrix()
         })
         .start()
@@ -87,21 +95,31 @@ const Earth = React.memo(({ displacementScale }) => {
       setFollowEarth(true)
     }
   }
+
   //
   useFrame(() => {
     updateEarthPosition()
-
+    TWEEN.update()
     if (followEarth) {
       const earthPosition = earthRef.current.position
-      const cameraPosition = camera.position
-      cameraPosition.set(
+      const cameraPosition = camera.position.clone()
+
+      const targetPosition = new THREE.Vector3(
         earthPosition.x + 10,
         earthPosition.y + 2,
         earthPosition.z + 5
       )
-      camera.lookAt(earthPosition)
+
+      new TWEEN.Tween(cameraPosition)
+        .to(targetPosition, 1000)
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .onUpdate(() => {
+          camera.position.copy(cameraPosition)
+          camera.lookAt(earthPosition)
+          camera.updateProjectionMatrix()
+        })
+        .start()
     }
-    TWEEN.update()
   })
 
   // useEffect(() => {
