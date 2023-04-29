@@ -76,9 +76,6 @@ const Earth = React.memo(({ displacementScale }) => {
         earthPosition.y + 2,
         earthPosition.z + 5
       )
-      const targetQuaternion = new THREE.Quaternion().setFromEuler(
-        new THREE.Euler(-0.5, 0, 0, 'XYZ')
-      )
 
       new TWEEN.Tween(cameraPosition)
         .to(targetPosition, tweenDuration)
