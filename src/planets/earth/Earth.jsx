@@ -65,7 +65,15 @@ const Earth = React.memo(({ displacementScale }) => {
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(() => {
           setCameraPosition(cameraPosition)
-          setCameraTarget(earthPosition)
+        })
+        .start()
+
+      // Create a new tween for cameraTarget
+      new TWEEN.Tween(cameraTarget)
+        .to(earthPosition, 2000)
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .onUpdate(() => {
+          setCameraTarget(cameraTarget)
         })
         .start()
     } else {
@@ -76,7 +84,15 @@ const Earth = React.memo(({ displacementScale }) => {
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(() => {
           setCameraPosition(cameraPosition)
-          setCameraTarget(new THREE.Vector3(0, 0, 0))
+        })
+        .start()
+
+      // Create a new tween for cameraTarget
+      new TWEEN.Tween(cameraTarget)
+        .to(new THREE.Vector3(0, 0, 0), 2000)
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .onUpdate(() => {
+          setCameraTarget(cameraTarget)
         })
         .start()
     }
@@ -87,7 +103,7 @@ const Earth = React.memo(({ displacementScale }) => {
   })
 
   useEffect(() => {
-    document.body.style.cursor ? 'pointer' : 'auto'
+    document.body.style.cursor = hovered ? 'pointer' : 'auto'
   }, [hovered])
 
   return (
@@ -95,11 +111,9 @@ const Earth = React.memo(({ displacementScale }) => {
       <mesh
         castShadow
         receiveShadow
-        // NEW ADDITIONS
-        onPointerOver={() => setHovered(true)}
-        onPointerOut={() => setHovered(false)}
         // Use pointerEvents to change cursor on hover
-      >
+        onPointerOver={() => setHovered(true)}
+        onPointerOut={() => setHovered(false)}>
         {/*  */}
 
         <sphereGeometry args={[1, 64, 64]} />
