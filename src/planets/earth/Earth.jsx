@@ -86,6 +86,10 @@ const Earth = React.memo(({ displacementScale }) => {
     camera.updateProjectionMatrix()
   })
 
+  useEffect(() => {
+    document.body.style.cursor ? 'pointer' : 'auto'
+  }, [hovered])
+
   return (
     <group ref={earthRef} onClick={toggleFollowingEarth}>
       <mesh
@@ -95,8 +99,7 @@ const Earth = React.memo(({ displacementScale }) => {
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
         // Use pointerEvents to change cursor on hover
-
-        style={{ cursor: hovered ? 'pointer' : 'auto' }}>
+      >
         {/*  */}
 
         <sphereGeometry args={[1, 64, 64]} />

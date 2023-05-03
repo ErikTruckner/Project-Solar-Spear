@@ -1,6 +1,11 @@
-import { useHelper, GizmoHelper, GizmoViewport } from '@react-three/drei'
+import {
+  useHelper,
+  GizmoHelper,
+  GizmoViewport,
+  OrbitControls,
+} from '@react-three/drei'
 import AnimatedStars from './AnimatedStars'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 
 import * as THREE from 'three'
 
@@ -11,36 +16,6 @@ import Sun from './planets/sun/Sun'
 import { Perf } from 'r3f-perf'
 
 const MainContainer = () => {
-  // CAMERA LOCATION TRACKER
-  // const { camera } = useThree()
-  // const cameraRef = useRef(camera)
-
-  // useEffect(() => {
-  //   const logCameraPosition = () => {
-  //     const { x, y, z } = cameraRef.current.position
-  //     const roundedX = Math.round(x * 100) / 100
-  //     const roundedY = Math.round(y * 100) / 100
-  //     const roundedZ = Math.round(z * 100) / 100
-  //     console.log(
-  //       `Camera position: x: ${roundedX}, y: ${roundedY}, z: ${roundedZ}`
-  //     )
-  //   }
-
-  //   cameraRef.current = camera
-  //   window.addEventListener('mousedown', logCameraPosition)
-
-  //   return () => {
-  //     window.removeEventListener('mousedown', logCameraPosition)
-  //   }
-  // }, [])
-
-  //
-
-  // const directionalLightRef = useRef()
-  // const directionalLightRefTwo = useRef()
-  // useHelper(directionalLightRef, THREE.DirectionalLightHelper, 1, 'hotpink')
-  // useHelper(directionalLightRefTwo, THREE.DirectionalLightHelper, 1, 'hotpink')
-
   return (
     <>
       <Perf />
@@ -54,6 +29,7 @@ const MainContainer = () => {
         />
         {/* alternative: <GizmoViewcube /> */}
       </GizmoHelper>
+      <OrbitControls />
       <UseCameraPositionLogging event='mousedown' />
       <AnimatedStars />
       {/* <directionalLight

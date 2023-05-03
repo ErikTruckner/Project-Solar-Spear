@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
+
 import MainContainer from './MainContainer'
 
 function App() {
@@ -14,7 +14,6 @@ function App() {
       }}>
       <color attach='background' args={['black']} />
       <MainContainer />
-      <OrbitControls />
     </Canvas>
   )
 }
