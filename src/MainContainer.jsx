@@ -4,7 +4,7 @@ import { useRef, useEffect } from 'react'
 
 import * as THREE from 'three'
 
-import UseCameraPositionLogging from './hooks/UseCameraPositionLogging'
+import UseCameraPositionLogging from './hooks/CameraPositionLogging'
 
 import Earth from './planets/earth/Earth'
 import Sun from './planets/sun/Sun'

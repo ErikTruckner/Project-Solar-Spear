@@ -33,9 +33,9 @@ const Moon = React.memo(() => {
   const updateMoonPosition = useCallback(() => {
     const xAxis = 5
     moonRef.current.position.x =
-      Math.sin(clockRef.current.getElapsedTime() * 0.6) * xAxis
+      Math.sin(clockRef.current.getElapsedTime() * 0.3) * xAxis
     moonRef.current.position.z =
-      Math.cos(clockRef.current.getElapsedTime() * 0.6) * xAxis
+      Math.cos(clockRef.current.getElapsedTime() * 0.3) * xAxis
     moonRef.current.rotation.y += 0.005
   }, [])
 

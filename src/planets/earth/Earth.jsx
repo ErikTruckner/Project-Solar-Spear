@@ -9,17 +9,16 @@ import ISS from './ISS'
 
 const Earth = React.memo(({ displacementScale }) => {
   const earthRef = useRef()
-  const earthPositionRef = useRef(new THREE.Vector3(10, 0, 0))
   const clockRef = useRef(new THREE.Clock())
 
-  //
-  const [hovered, hover] = useState(false)
-
-  const [followEarth, setFollowEarth] = useState(false)
-  //
-  //
   const { camera } = useThree()
-  //
+
+  const [hovered, setHovered] = useState(false)
+  const [followingEarth, setFollowingEarth] = useState(false)
+  const [cameraPosition, setCameraPosition] = useState(
+    new THREE.Vector3(16.14, 8.32, 19.81)
+  )
+  const [cameraTarget, setCameraTarget] = useState(new THREE.Vector3(0, 0, 0))
 
   const [
     earthTexture,
@@ -36,71 +35,25 @@ const Earth = React.memo(({ displacementScale }) => {
   ])
 
   const updateEarthPosition = useCallback(() => {
-    const angle = clockRef.current.getElapsedTime() * 0.5
+    const angle = clockRef.current.getElapsedTime() * 0.2
     const distance = 10
     const x = Math.sin(angle) * distance
     const z = Math.cos(angle) * distance
     earthRef.current.position.set(x, 0, z)
-    earthRef.current.rotation.y += 0.002
-    earthPositionRef.current = earthRef.current.position
+    earthRef.current.rotation.y += 0.006
   }, [])
 
-  useEffect(() => {
-    document.body.style.cursor = hovered ? 'pointer' : 'auto'
-  }, [hovered])
-
-  const toggleCamera = () => {
-    const earthPosition = earthRef.current.position
-    const cameraPosition = camera.position.clone()
-    const tweenDuration = 1000 // in milliseconds
-
-    if (followEarth) {
-      // If already following the Earth, move the camera back to its original position
-      new TWEEN.Tween(cameraPosition)
-        .to({ x: 16.14, y: 8.32, z: 19.81 }, tweenDuration)
-        .easing(TWEEN.Easing.Quadratic.Out)
-        .onUpdate(() => {
-          camera.position.copy(cameraPosition)
-          camera.lookAt(0, 0, 0) // Look at the origin
-        })
-        .onComplete(() => {
-          camera.updateProjectionMatrix()
-        })
-        .start()
-
-      setFollowEarth(false)
-    } else {
-      // If not following the Earth, move the camera to look at the Earth
-      const targetPosition = new THREE.Vector3(
-        earthPosition.x,
-        earthPosition.y + 2,
-        earthPosition.z + 5
-      )
-
-      new TWEEN.Tween(cameraPosition)
-        .to(targetPosition, tweenDuration)
-        .easing(TWEEN.Easing.Quadratic.Out)
-        .onUpdate(() => {
-          camera.position.copy(cameraPosition)
-          camera.lookAt(earthPosition) // Look at the Earth
-        })
-        .onComplete(() => {
-          camera.updateProjectionMatrix()
-        })
-        .start()
-
-      setFollowEarth(true)
-    }
+  const toggleFollowingEarth = () => {
+    setFollowingEarth((prevFollowingEarth) => !prevFollowingEarth)
   }
 
-  //
   useFrame(() => {
     updateEarthPosition()
     TWEEN.update()
-    if (followEarth) {
-      const earthPosition = earthRef.current.position
-      const cameraPosition = camera.position.clone()
 
+    const earthPosition = earthRef.current.position
+
+    if (followingEarth) {
       const targetPosition = new THREE.Vector3(
         earthPosition.x + 10,
         earthPosition.y + 2,
@@ -111,43 +64,36 @@ const Earth = React.memo(({ displacementScale }) => {
         .to(targetPosition, 1000)
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(() => {
-          camera.position.copy(cameraPosition)
-          camera.lookAt(earthPosition)
-          camera.updateProjectionMatrix()
+          setCameraPosition(cameraPosition)
+          setCameraTarget(earthPosition)
+        })
+        .start()
+    } else {
+      const targetPosition = new THREE.Vector3(16.14, 8.32, 19.81)
+
+      new TWEEN.Tween(cameraPosition)
+        .to(targetPosition, 1000)
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .onUpdate(() => {
+          setCameraPosition(cameraPosition)
+          setCameraTarget(new THREE.Vector3(0, 0, 0))
         })
         .start()
     }
+
+    camera.position.copy(cameraPosition)
+    camera.lookAt(cameraTarget)
+    camera.updateProjectionMatrix()
   })
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     const earthPos = earthRef.current.position
-  //     const cameraPos = camera.position
-  //     console.log(
-  //       'Earth position: ',
-  //       earthPos.x.toFixed(1),
-  //       earthPos.y.toFixed(1),
-  //       earthPos.z.toFixed(1)
-  //     )
-  //     console.log(
-  //       'Camera position: ',
-  //       cameraPos.x.toFixed(1),
-  //       cameraPos.y.toFixed(1),
-  //       cameraPos.z.toFixed(1)
-  //     )
-  //   }, 1000)
-
-  //   return () => clearInterval(interval)
-  // }, [])
-
   return (
-    <group ref={earthRef} onClick={toggleCamera}>
+    <group ref={earthRef} onClick={toggleFollowingEarth}>
       <mesh
         castShadow
         receiveShadow
         // NEW ADDITIONS
-        onPointerOver={() => hover(true)}
-        onPointerOut={() => hover(false)}
+        onPointerOver={() => setHovered(true)}
+        onPointerOut={() => setHovered(false)}
         // Use pointerEvents to change cursor on hover
 
         style={{ cursor: hovered ? 'pointer' : 'auto' }}>
