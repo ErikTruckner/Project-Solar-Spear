@@ -51,13 +51,13 @@ const Earth = React.memo(({ displacementScale }) => {
     updateEarthPosition()
     TWEEN.update()
 
-    const earthPosition = earthRef.current.position
+    const earthPositionRef = earthRef.current.position
 
     if (followingEarth) {
       const targetPosition = new THREE.Vector3(
-        earthPosition.x + 10,
-        earthPosition.y + 2,
-        earthPosition.z + 5
+        earthPositionRef.x + 10,
+        earthPositionRef.y + 2,
+        earthPositionRef.z + 5
       )
 
       new TWEEN.Tween(cameraPosition)
@@ -70,7 +70,7 @@ const Earth = React.memo(({ displacementScale }) => {
 
       // Create a new tween for cameraTarget
       new TWEEN.Tween(cameraTarget)
-        .to(earthPosition, 2000)
+        .to(earthPositionRef, 1000)
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(() => {
           setCameraTarget(cameraTarget)
@@ -89,7 +89,7 @@ const Earth = React.memo(({ displacementScale }) => {
 
       // Create a new tween for cameraTarget
       new TWEEN.Tween(cameraTarget)
-        .to(new THREE.Vector3(0, 0, 0), 2000)
+        .to(new THREE.Vector3(0, 0, 0), 1000)
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(() => {
           setCameraTarget(cameraTarget)
